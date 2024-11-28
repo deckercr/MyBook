@@ -49,12 +49,6 @@ namespace ProjectOne
             }
         }
 
-        // Event handler for the button3_Click event.
-        private void button3_Click(object sender, EventArgs e)
-        {
-            // Create an instance of the StudentForm
-        }
-
         private void exitButton_Click(object sender, EventArgs e)
         {
             Close();
@@ -88,6 +82,69 @@ namespace ProjectOne
                     // Handle any exceptions (e.g., issues opening the form)
                     MessageBox.Show($"Error opening All Students form: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
+            }
+        }
+
+        private void whoInCourseButton_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                //create whoCourse form
+                whoCourse courseStudentsForm = new whoCourse(dbManager);
+                courseStudentsForm.Show();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error opening Who Is In Course form: {ex.Message}",
+                    "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void whatCoursesButton_Click(object sender, EventArgs e)
+        {
+            try
+            {
+
+                //creates whatCourse form
+                whatCourse coursesForm = new whatCourse(dbManager);
+                coursesForm.Show();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error opening What Courses form: {ex.Message}",
+                    "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void displayAllCoursesButton_Click(object sender, EventArgs e)
+        {
+            AllCoursesForm allCoursesFrom = new AllCoursesForm();
+            allCoursesFrom.ShowDialog();
+        }
+
+        private void addCourseButton_Click(object sender, EventArgs e)
+        {
+            AddCourseForm addCourseForm = new AddCourseForm();
+            addCourseForm.ShowDialog();
+
+            // Katelyn Holt, CISS 311 Advanced Agile, 11/20/2024
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                // Create an instance of EnrollStudentForm
+                EnrollStudentForm enrollStudentForm = new EnrollStudentForm();
+
+                // Show the form as a modal dialog (use Show() for non-modal)
+                enrollStudentForm.ShowDialog();
+            }
+            catch (Exception ex)
+            {
+                // Handle any exceptions (e.g., issues opening the form)
+                MessageBox.Show($"Error opening Enroll Student form: {ex.Message}",
+                    "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
     }

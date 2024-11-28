@@ -35,7 +35,7 @@ namespace ProjectOne
                 // Add students to the ListBox
                 foreach (var student in students)
                 {
-                    AllStudentslistBox.Items.Add(student.StudentName);
+                    AllStudentslistBox.Items.Add($"{student.StudentID}   -   {student.StudentName}");
                 }
             }
             catch (Exception ex)

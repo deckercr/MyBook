@@ -33,10 +33,10 @@
             addStudentButton = new Button();
             allStudentsButton = new Button();
             button2 = new Button();
-            button3 = new Button();
-            button5 = new Button();
-            button6 = new Button();
-            button7 = new Button();
+            whatCoursesButton = new Button();
+            addCourseButton = new Button();
+            displayAllCoursesButton = new Button();
+            whoInCourseButton = new Button();
             exitButton = new Button();
             SuspendLayout();
             // 
@@ -92,46 +92,51 @@
             button2.TabIndex = 6;
             button2.Text = "Enroll a Student In a Course";
             button2.UseVisualStyleBackColor = true;
+            button2.Click += button2_Click;
             // 
-            // button3
+            // whatCoursesButton
             // 
-            button3.Font = new Font("Segoe UI Black", 10F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            button3.Location = new Point(254, 409);
-            button3.Name = "button3";
-            button3.Size = new Size(217, 84);
-            button3.TabIndex = 7;
-            button3.Text = "What Courses a Student Enrolled In";
-            button3.UseVisualStyleBackColor = true;
+            whatCoursesButton.Font = new Font("Segoe UI Black", 10F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            whatCoursesButton.Location = new Point(254, 409);
+            whatCoursesButton.Name = "whatCoursesButton";
+            whatCoursesButton.Size = new Size(217, 84);
+            whatCoursesButton.TabIndex = 7;
+            whatCoursesButton.Text = "What Courses a Student Enrolled In";
+            whatCoursesButton.UseVisualStyleBackColor = true;
+            whatCoursesButton.Click += whatCoursesButton_Click;
             // 
-            // button5
+            // addCourseButton
             // 
-            button5.Font = new Font("Segoe UI Black", 10F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            button5.Location = new Point(633, 161);
-            button5.Name = "button5";
-            button5.Size = new Size(196, 52);
-            button5.TabIndex = 8;
-            button5.Text = "Add a Course";
-            button5.UseVisualStyleBackColor = true;
+            addCourseButton.Font = new Font("Segoe UI Black", 10F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            addCourseButton.Location = new Point(633, 161);
+            addCourseButton.Name = "addCourseButton";
+            addCourseButton.Size = new Size(196, 52);
+            addCourseButton.TabIndex = 8;
+            addCourseButton.Text = "Add a Course";
+            addCourseButton.UseVisualStyleBackColor = true;
+            addCourseButton.Click += addCourseButton_Click;
             // 
-            // button6
+            // displayAllCoursesButton
             // 
-            button6.Font = new Font("Segoe UI Black", 10F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            button6.Location = new Point(633, 219);
-            button6.Name = "button6";
-            button6.Size = new Size(196, 86);
-            button6.TabIndex = 9;
-            button6.Text = "Display All Courses";
-            button6.UseVisualStyleBackColor = true;
+            displayAllCoursesButton.Font = new Font("Segoe UI Black", 10F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            displayAllCoursesButton.Location = new Point(633, 219);
+            displayAllCoursesButton.Name = "displayAllCoursesButton";
+            displayAllCoursesButton.Size = new Size(196, 86);
+            displayAllCoursesButton.TabIndex = 9;
+            displayAllCoursesButton.Text = "Display All Courses";
+            displayAllCoursesButton.UseVisualStyleBackColor = true;
+            displayAllCoursesButton.Click += displayAllCoursesButton_Click;
             // 
-            // button7
+            // whoInCourseButton
             // 
-            button7.Font = new Font("Segoe UI Black", 10F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            button7.Location = new Point(633, 311);
-            button7.Name = "button7";
-            button7.Size = new Size(196, 92);
-            button7.TabIndex = 10;
-            button7.Text = "Who Is In a Course";
-            button7.UseVisualStyleBackColor = true;
+            whoInCourseButton.Font = new Font("Segoe UI Black", 10F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            whoInCourseButton.Location = new Point(633, 311);
+            whoInCourseButton.Name = "whoInCourseButton";
+            whoInCourseButton.Size = new Size(196, 92);
+            whoInCourseButton.TabIndex = 10;
+            whoInCourseButton.Text = "Who Is In a Course";
+            whoInCourseButton.UseVisualStyleBackColor = true;
+            whoInCourseButton.Click += whoInCourseButton_Click;
             // 
             // exitButton
             // 
@@ -150,10 +155,10 @@
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1101, 528);
             Controls.Add(exitButton);
-            Controls.Add(button7);
-            Controls.Add(button6);
-            Controls.Add(button5);
-            Controls.Add(button3);
+            Controls.Add(whoInCourseButton);
+            Controls.Add(displayAllCoursesButton);
+            Controls.Add(addCourseButton);
+            Controls.Add(whatCoursesButton);
             Controls.Add(button2);
             Controls.Add(allStudentsButton);
             Controls.Add(addStudentButton);
@@ -171,10 +176,10 @@
         private Button addStudentButton;
         private Button allStudentsButton;
         private Button button2;
-        private Button button3;
-        private Button button5;
-        private Button button6;
-        private Button button7;
+        private Button whatCoursesButton;
+        private Button addCourseButton;
+        private Button displayAllCoursesButton;
+        private Button whoInCourseButton;
         private Button exitButton;
     }
 }

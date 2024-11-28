@@ -26,12 +26,12 @@ namespace ProjectOne
     // Represents a course with an ID, title, and semester offered.
     public class Course
     {
-        public int CourseID { get; set; }
+        public string CourseID { get; set; }
         public string CourseTitle { get; set; }
         public string SemesterOffered { get; set; }
 
         // Constructor for the Course class.
-        public Course(int id, string title, string semester)
+        public Course(string id, string title, string semester)
         {
             CourseID = id;
             CourseTitle = title;
@@ -66,8 +66,9 @@ namespace ProjectOne
         {
             // Initializes the database, ensuring it exists and has the correct schema.
             // Returns true if initialization is successful, false otherwise.
+
             try
-            {
+            {                
                 // First, verify SQL script file exists
                 if (!File.Exists(sqlScriptPath))
                 {
@@ -391,6 +392,84 @@ namespace ProjectOne
             return students;
         }
 
+        // Adds a New Course to the Courses table.
+        // Recycled AddStudent() Code written by Rick Decker
+        // Katelyn Holt
+        public bool AddCourse(string courseTitle, string semesterOffered, out string generatedCourseID)
+        {
+            generatedCourseID = null; // Default value if insertion fails.
+            try
+            {
+                // Get a connection to the database.
+                using var connection = GetConnection();
+                // Begin a transaction to ensure atomicity of the insert operation.
+                using var transaction = connection.BeginTransaction();
+                // Get the current date in YYYYMMDD format for use in the course ID.
+                //var currentDate = DateTime.Now.ToString("yyyyMMdd");
+
+                int lastNumber;
+
+                // Get the last course ID number for the current date.
+                /* using (var command = connection.CreateCommand())
+                {
+                    command.Transaction = transaction;
+                    command.CommandText = @"
+                SELECT COALESCE(
+                    MAX(CAST(SUBSTR(CourseID, -5) AS INTEGER)), 0
+                )
+                FROM Courses 
+                WHERE CourseID LIKE @courseIdPrefix";
+
+                    command.Parameters.AddWithValue("@courseIdPrefix", $"CRS{currentDate}%");
+                    lastNumber = Convert.ToInt32(command.ExecuteScalar());
+                } */
+
+                // Get the last course ID number used in the database.
+                using (var command = connection.CreateCommand())
+                {
+                    command.Transaction = transaction;
+                    command.CommandText = @"
+                    SELECT COALESCE(
+                        MAX(CAST(SUBSTR(CourseID, 4, 3) AS INTEGER)), 0
+                    )
+                    FROM Courses 
+                    WHERE CourseID LIKE @courseIdPrefix";
+
+                    command.Parameters.AddWithValue("@courseIdPrefix", "CRS%");
+                    lastNumber = Convert.ToInt32(command.ExecuteScalar());
+                }
+
+                // Generate the next course ID.
+                var nextNumber = (lastNumber + 1).ToString("D3");
+                generatedCourseID = $"CRS{nextNumber}";
+
+
+                // Insert the new course into the Courses table.
+                using (var insertCommand = connection.CreateCommand())
+                {
+                    insertCommand.Transaction = transaction;
+                    insertCommand.CommandText = @"
+                    INSERT INTO Courses (CourseID, CourseTitle, SemesterOffered) 
+                    VALUES (@courseID, @courseTitle, @semesterOffered)";
+
+                    insertCommand.Parameters.AddWithValue("@courseID", generatedCourseID);
+                    insertCommand.Parameters.AddWithValue("@courseTitle", courseTitle);
+                    insertCommand.Parameters.AddWithValue("@semesterOffered", semesterOffered);
+
+                    // Check if the insert operation was successful.
+                    var result = insertCommand.ExecuteNonQuery() > 0;
+                    transaction.Commit();
+                    return result;
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Error adding course: {ex.Message}");
+                return false;
+            }
+        }
+
+
         // Retrieves all courses from the Courses table.
         public List<Course> GetAllCourses()
         {
@@ -409,9 +488,9 @@ namespace ProjectOne
                 while (reader.Read())
                 {
                     courses.Add(new Course(
-                        reader.GetInt32(0),
-                        reader.GetString(1),
-                        reader.GetString(2)
+                        reader.GetString(0), // Course ID
+                        reader.GetString(1), // Course Title
+                        reader.GetString(2)  // Semester Offered
                     ));
                 }
             }
@@ -423,7 +502,7 @@ namespace ProjectOne
         }
 
         // Enrolls a student in a course.
-        public bool EnrollStudent(string studentId, int courseId)
+        public bool EnrollStudent(string studentId, string courseId)
         {
             try
             {
@@ -437,10 +516,10 @@ namespace ProjectOne
                 {
                     checkCommand.Transaction = transaction;
                     checkCommand.CommandText = @"
-                        SELECT COUNT(*) 
-                        FROM StudentCourses 
-                        WHERE StudentID = @studentId 
-                        AND CourseID = @courseId";
+                SELECT COUNT(*) 
+                FROM StudentCourses 
+                WHERE StudentID = @studentId 
+                AND CourseID = @courseId";
 
                     checkCommand.Parameters.AddWithValue("@studentId", studentId);
                     checkCommand.Parameters.AddWithValue("@courseId", courseId);
@@ -458,11 +537,12 @@ namespace ProjectOne
                 {
                     command.Transaction = transaction;
                     command.CommandText = @"
-                        INSERT INTO StudentCourses (StudentID, CourseID, EnrollmentStatus) 
-                        VALUES (@studentId, @courseId, 'InProgress')";
+                INSERT INTO StudentCourses (StudentID, CourseID, EnrollmentStatus, EnrollmentDate) 
+                VALUES (@studentId, @courseId, 'InProgress', @enrollmentDate)";
 
                     command.Parameters.AddWithValue("@studentId", studentId);
                     command.Parameters.AddWithValue("@courseId", courseId);
+                    command.Parameters.AddWithValue("@enrollmentDate", DateTime.Now);
 
                     // Check if the insert operation was successful.
                     var result = command.ExecuteNonQuery() > 0;
